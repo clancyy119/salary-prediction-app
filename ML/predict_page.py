@@ -1,57 +1,9 @@
-import streamlit as st
-import pickle
-import numpy as np
+import os
 
-def load_model():
-    with open('saved_steps.pkl', 'rb') as file:
-        data = pickle.load(file)
-    return data
+# Get the directory of the current script
+script_dir = os.path.dirname(__file__)
 
-data = load_model()
+# Set the path for saved_steps.pkl relative to the script location
+saved_steps_path = os.path.join(script_dir, 'saved_steps.pkl')
 
-regressor = data["model"]
-le_country = data["le_country"]
-le_education = data["le_education"]
-
-def show_predict_page():
-    st.title("Software Developer Salary Prediction")
-
-    st.write("### We need some information to predict the salary")
-
-    country = (
-        "United States",
-        "India",
-        "United Kingdom",
-        "Germany",
-        "Canada",
-        "Brazil",
-        "France",
-        "Spain",
-        "Australia",
-        "Netherlands",
-        "Poland",
-        "Italy",
-        "Russian Federation",
-        "Sweden",
-    ) 
-
-    education = (
-        "Less than a Bachelors",
-        "Bachelor's degree",
-        "Master's degree",
-        "Post grad",
-    )
-
-    country = st.selectbox("Country", country)
-    education_level = st.selectbox("Education Level", education)
-    experience = st.slider("Years of Experience", 0, 50, 3)
-
-    ok= st.button("Calculate Salary")
-    if ok:
-        X = np.array([[country, education_level, experience]])
-        X[:, 0] = le_country.transform(X[:, 0])
-        X[:, 1] = le_education.transform(X[:, 1])
-        X = X.astype(float)
-
-        salary = regressor.predict(X)
-        st.subheader(f"The estimated salary is ${salary[0]:.2f}")
+# Assumed further code using saved_steps_path
